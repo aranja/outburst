@@ -5,4 +5,4 @@ var coffee = require('coffee-script/register')
   , port = process.env.PORT || 8000;
 
 app.listen(port);
-console.log("Listening on port %d in %s mode", port, app.settings.env);
+console.log("Listening on port %d", port);

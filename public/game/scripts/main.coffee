@@ -178,12 +178,13 @@ class Game
 
 document.addEventListener 'DOMContentLoaded', =>
   # Try to authenticate user
-  microAjax "/oauth/user", (res) ->
-    if res == "error"
-      initGame()
-    else
-      twitterUser = JSON.parse res
-      initGame(nick: twitterUser.screen_name)
+  #microAjax "/oauth/user", (res) ->
+  #  if res == "error"
+  #    initGame()
+  #  else
+  #    twitterUser = JSON.parse res
+  #    initGame(nick: twitterUser.screen_name)
+  initGame(nick: 'Aranja')
       
       
 initGame = (user = nick: "Anonymous") ->
