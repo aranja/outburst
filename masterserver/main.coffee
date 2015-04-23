@@ -2,10 +2,18 @@
 # Dependencies
 ##
 express = require('express')
-RedisStore = require('connect-redis')(express)
+session = require('express-session')
+RedisStore = require('connect-redis')(session)
 OAuth = require('oauth').OAuth
 fs    = require('fs')
 path  = require('path')
+
+# Middleware
+bodyParser = require('body-parser')
+methodOverride = require('method-override')
+cookieParser = require('cookie-parser')
+coffeeMiddleware = require('coffee-middleware')
+errorHandler = require('errorhandler')
 
 class exports.Server
   constructor: (@app) ->
@@ -24,10 +32,10 @@ class exports.Server
     @app.set 'view engine', 'jade'
     @app.set 'view options', { layout: false }
     @app.set 'serverPath', "http://outburstgame.com"
-    @app.configure 'development', =>
-      @app.set 'errorHandler', { dumpExceptions: true, showStack: true }
-    @app.configure 'production', =>
-      @app.set 'errorHandler', {}
+    #@app.configure 'development', =>
+    @app.set 'errorHandler', { dumpExceptions: true, showStack: true }
+    #@app.configure 'production', =>
+    #  @app.set 'errorHandler', {}
 
     try
       json = fs.readFileSync __dirname + '/locals.json', "utf8"
@@ -37,9 +45,9 @@ class exports.Server
       throw e if e.code not in ["EBADF", "ENOENT"]
 
     # Middleware
-    @app.use express.bodyParser()
-    @app.use express.methodOverride()
-    @app.use express.cookieParser()
+    @app.use bodyParser()
+    @app.use methodOverride()
+    @app.use cookieParser()
 
     # Store session in Redis
     store = null
@@ -54,7 +62,7 @@ class exports.Server
     else
       store = new RedisStore()
 
-    @app.use express.session(
+    @app.use session(
       store: store
       secret: "mysuperdupahsicretekeeey!"
       cookie:
@@ -64,10 +72,10 @@ class exports.Server
         httpOnly: false
     )
 
-    @app.use express.compiler({src: __dirname + '/../public', enable: ['coffeescript']})
+    @app.use coffeeMiddleware({src: __dirname + '/../public', compress: true})
     @app.use require('stylus').middleware({ src: __dirname + '/../public' })
     @app.use express.static(__dirname + '/../public')
-    @app.use express.errorHandler(@app.set('errorHandler'))
+    @app.use errorHandler(@app.set('errorHandler'))
 
   setupOAuth: ->
     @oa = new OAuth("https://twitter.com/oauth/request_token",

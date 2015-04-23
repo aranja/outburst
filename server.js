@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var coffee = require('coffee-script')
+var coffee = require('coffee-script/register')
   , app = require('./app')
   , port = process.env.PORT || 8000;
 

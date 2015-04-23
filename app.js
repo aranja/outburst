@@ -11,7 +11,7 @@ var express = require('express')
 /**
  * Create express server
  */
-var app = module.exports = express.createServer();
+var app = module.exports = express();
 
 if (!socketPort)
   socketPort = app;

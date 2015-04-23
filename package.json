@@ -1,17 +1,23 @@
 {
-    "name": "Outburst"
-  , "version": "0.0.2"
-  , "private": true
-  , "dependencies": {
-      "coffee-script": "1.3.x"
-    , "express": "2.5.x"
-    , "connect-redis": "1.3.x"
-    , "jade": "0.26.x"
-    , "stylus": "0.26.x"
-    , "socket.io": "0.9.x"
-    , "oauth": "0.9.x"
-  }
-  , "engines": {
-    "node": "0.6"
+  "name": "outburst",
+  "version": "0.0.2",
+  "private": true,
+  "dependencies": {
+    "coffee-script": "1.9.x",
+    "express": "4.12.x",
+    "connect-redis": "2.2.x",
+    "jade": "1.9.x",
+    "stylus": "0.50.x",
+    "socket.io": "1.3.x",
+    "oauth": "0.9.x",
+    "express-session": "^1.11.1",
+    "cookie-parser": "^1.3.4",
+    "body-parser": "^1.12.3",
+    "method-override": "^2.3.2",
+    "coffee-middleware": "^0.2.1",
+    "errorhandler": "^1.3.5"
+  },
+  "engines": {
+    "node": "0.10"
   }
 }

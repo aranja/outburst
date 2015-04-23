@@ -1,4 +1,4 @@
-!!!
+doctype html
 html(lang="en", manifest="/cache.manifest")
   head
     title Outburst by Aranja
@@ -52,47 +52,48 @@ html(lang="en", manifest="/cache.manifest")
     script(src="js/libs/knockout.js")
     script(src="game/libs/socket.io.js")
     script(src="game/shared/constants.js")
-    :coffeescript
-      # A better test for webgl support
-      Modernizr.addTest "webglcontext", ->
-        canvas = document.createElement("canvas")
-        for c in ["webgl", "experimental-webgl", "moz-webgl", "o-webgl", "webkit-3d", "3d"]
-          try
-            return true if canvas.getContext c
-          catch e
-            console.log e
-        return false
-
-      # Test if we can connect to server using socket.io
-      testConnection = ->
-        if constants.SOCKET_PORT
-          socket = io.connect("#{location.protocol}//#{location.hostname}:#{constants.SOCKET_PORT}")
-        else
-          socket = io.connect()
-        socket.on 'connect', ->
-          vm.connection true
-          socket.disconnect()
-        socket.on 'error', (err) ->
-          vm.connection false
-
-      # ViewModel for page
-      vm =
-        supportsWebgl: Modernizr.webgl and Modernizr.webglcontext
-        supportsWebsockets: Modernizr.websockets
-        failingWebglContext: Modernizr.webgl and not Modernizr.webglcontext
-        needsBetterBrowser: not (Modernizr.websockets and Modernizr.webgl)
-        connection: ko.observable(Modernizr.websockets and null)
-
-      ko.applyBindings vm
-      testConnection()
-
     script
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-25659758-1']);
-      _gaq.push(['_trackPageview']);
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
+      :coffee
+        # A better test for webgl support
+        Modernizr.addTest "webglcontext", ->
+          canvas = document.createElement("canvas")
+          for c in ["webgl", "experimental-webgl", "moz-webgl", "o-webgl", "webkit-3d", "3d"]
+            try
+              return true if canvas.getContext c
+            catch e
+              console.log e
+          return false
+
+        # Test if we can connect to server using socket.io
+        testConnection = ->
+          if constants.SOCKET_PORT
+            socket = io.connect("#{location.protocol}//#{location.hostname}:#{constants.SOCKET_PORT}")
+          else
+            socket = io.connect()
+          socket.on 'connect', ->
+            vm.connection true
+            socket.disconnect()
+          socket.on 'error', (err) ->
+            vm.connection false
+
+        # ViewModel for page
+        vm =
+          supportsWebgl: Modernizr.webgl and Modernizr.webglcontext
+          supportsWebsockets: Modernizr.websockets
+          failingWebglContext: Modernizr.webgl and not Modernizr.webglcontext
+          needsBetterBrowser: not (Modernizr.websockets and Modernizr.webgl)
+          connection: ko.observable(Modernizr.websockets and null)
+
+        ko.applyBindings vm
+        testConnection()
+
+      script.
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-25659758-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
 
